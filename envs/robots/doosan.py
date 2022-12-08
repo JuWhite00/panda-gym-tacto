@@ -1,26 +1,5 @@
-from typing import Optional
-
-import numpy as np
-import os
-from gymnasium import spaces
-
-from panda_gym.envs.core import PyBulletRobot
-from panda_gym.pybullet import PyBullet
-from sys import platform
-
-dirname = os.path.dirname(__file__)
-
-if platform == "win32":
-    print("HERE")
-    doosan_path2 = ''
-else:
-    doosan_path2 = '../../mesh/doosan-robot2/dsr_description2/urdf/a0509.blue_gripper.urdf'
-    print("NOT HERE")
-cocu = 'C:/Users/bouff/anaconda3/envs/RoboticsProject/Lib/site-packages/panda_gym/mesh/doosan-robot2/dsr_description2/urdf/a0509.blue_gripper.urdf'
-
-
-class Panda(PyBulletRobot):
-    """Panda robot in PyBullet.
+class Doosan(PyBulletRobot):
+    """Doosan robot in PyBullet.
 
     Args:
         sim (PyBullet): Simulation instance.
@@ -29,7 +8,6 @@ class Panda(PyBulletRobot):
         control_type (str, optional): "ee" to control end-effector displacement or "joints" to control joint angles.
             Defaults to "ee".
     """
-
     def __init__(
         self,
         sim: PyBullet,
@@ -45,17 +23,17 @@ class Panda(PyBulletRobot):
         action_space = spaces.Box(-1.0, 1.0, shape=(n_action,), dtype=np.float32)
         super().__init__(
             sim,
-            body_name="panda",
-            file_name="franka_panda/panda.urdf",
+            body_name="Doosan",
+            file_name= cocu,
             base_position=base_position,
             action_space=action_space,
-            joint_indices=np.array([0, 1, 2, 3, 4, 5, 6, 9, 10, 11]),
-            joint_forces=np.array([87.0, 87.0, 87.0, 87.0, 12.0, 120.0, 120.0, 170.0, 170.0, 170.0]),
+            joint_indices=np.array([0, 1, 2, 3, 4, 5, 6, 9, 10]),
+            joint_forces=np.array([87.0, 87.0, 87.0, 87.0, 12.0, 120.0, 120.0, 170.0, 170.0]),
         )
 
         self.fingers_indices = np.array([9, 10])
-        self.neutral_joint_values = np.array([0.00, 0.41, 0.00, -1.85, 0.00, 2.26, 0.79, 0.00, 0.00])
-        self.ee_link = 10
+        self.neutral_joint_values = np.array([0.00, 0.41, 0.00, -1.85, 0.00, 2.26, 0.79, 10.00, 10.00])
+        self.ee_link = 11
         self.sim.set_lateral_friction(self.body_name, self.fingers_indices[0], lateral_friction=1.0)
         self.sim.set_lateral_friction(self.body_name, self.fingers_indices[1], lateral_friction=1.0)
         self.sim.set_spinning_friction(self.body_name, self.fingers_indices[0], spinning_friction=0.001)
@@ -122,7 +100,6 @@ class Panda(PyBulletRobot):
         # end-effector position and velocity
         ee_position = np.array(self.get_ee_position())
         ee_velocity = np.array(self.get_ee_velocity())
-    
         # fingers opening
         if not self.block_gripper:
             fingers_width = self.get_fingers_width()
@@ -151,4 +128,3 @@ class Panda(PyBulletRobot):
     def get_ee_velocity(self) -> np.ndarray:
         """Returns the velocity of the end-effector as (vx, vy, vz)"""
         return self.get_link_velocity(self.ee_link)
-

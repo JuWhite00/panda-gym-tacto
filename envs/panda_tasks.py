@@ -2,7 +2,7 @@ import numpy as np
 
 from panda_gym.envs.core import RobotTaskEnv
 from panda_gym.envs.robots.panda import Panda
-from panda_gym.envs.robots.panda import Doosan
+from panda_gym.envs.robots.doosan import Doosan
 from panda_gym.envs.tasks.flip import Flip
 from panda_gym.envs.tasks.pick_and_place import PickAndPlace
 from panda_gym.envs.tasks.push import Push
