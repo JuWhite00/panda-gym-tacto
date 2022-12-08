@@ -5,10 +5,12 @@ Created on Wed Dec  7 15:24:08 2022
 @author: bouff
 """
 
-import panda_gym 
+import panda_gym
 import gymnasium as gym 
+from panda_gym.envs.panda_tasks import DoosanTest
 
-env = gym.make("DoosanTest-v3", render= True )
+
+env = DoosanTest(render= True)
 
 observation, info = env.reset()
 
